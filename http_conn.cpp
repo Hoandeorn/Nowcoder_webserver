@@ -94,11 +94,10 @@ bool http_conn::read(){
 }
 
 bool http_conn::write(){
-    int temp = 0; // ?
-    int bytes_have_send = 0;
-    int bytes_to_send = m_write_idx;
-    if (!bytes_have_send) {
-        modfd(m_epollfd, m_sockfd, EPOLLIN);
+    int temp = 0;
+    if ( bytes_to_send == 0 ) {
+        // 将要发送的字节为0，这一次响应结束。
+        modfd( m_epollfd, m_sockfd, EPOLLIN );
         init();
         return true;
     }
@@ -117,18 +116,26 @@ bool http_conn::write(){
         }
         bytes_to_send -= temp;
         bytes_have_send += temp;
-        if (bytes_to_send <= bytes_have_send) {
-            // 发送HTTP响应成功，根据HTTP请求中的Connection字段决定是否立即关闭连接
+        if (bytes_have_send >= m_iv[0].iov_len){
+            m_iv[0].iov_len = 0;
+            m_iv[1].iov_base = m_file_address + (bytes_have_send - m_write_idx);
+            m_iv[1].iov_len = bytes_to_send;
+        }
+        else {
+            m_iv[0].iov_base = m_write_buf + bytes_have_send;
+            m_iv[0].iov_len = m_iv[0].iov_len - temp;
+        }
+        if (!bytes_to_send) {
             unmap();
+            modfd(m_epollfd, m_sockfd, EPOLLIN);
+
             if (m_linger) {
                 init();
-                modfd(m_epollfd, m_sockfd, EPOLLIN);
                 return true;
-            } else {
-                modfd( m_epollfd, m_sockfd, EPOLLIN );
-                return false;
             }
+            else return false;
         }
+
     }
 
 }
@@ -414,6 +421,7 @@ bool http_conn::process_write(HTTP_CODE ret) {
             m_iv[1].iov_base = m_file_address;
             m_iv[1].iov_len = m_file_stat.st_size;
             m_iv_count = 2;
+            bytes_to_send = m_write_idx + m_file_stat.st_size;
 #ifdef DEBUG
             printf("FILE_REQUEST: true.\n");
 #endif
