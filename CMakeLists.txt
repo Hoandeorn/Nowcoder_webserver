@@ -3,4 +3,4 @@ project(webserver)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(webserver main.cpp locker.cpp locker.h threadpool.h http_conn.cpp http_conn.h)
+add_executable(webserver main.cpp locker.cpp locker.h threadpool.h http_conn.cpp http_conn.h noactive/lst_timer.h noactive/nonactive_conn.cpp)

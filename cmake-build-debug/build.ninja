@@ -90,6 +90,12 @@ build CMakeFiles/webserver.dir/http_conn.cpp.o: CXX_COMPILER__webserver_Debug /U
   OBJECT_DIR = CMakeFiles/webserver.dir
   OBJECT_FILE_DIR = CMakeFiles/webserver.dir
 
+build CMakeFiles/webserver.dir/noactive/nonactive_conn.cpp.o: CXX_COMPILER__webserver_Debug /Users/sapplehalf/CLionProjects/webserver/noactive/nonactive_conn.cpp || cmake_object_order_depends_target_webserver
+  DEP_FILE = CMakeFiles/webserver.dir/noactive/nonactive_conn.cpp.o.d
+  FLAGS = -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -std=gnu++14
+  OBJECT_DIR = CMakeFiles/webserver.dir
+  OBJECT_FILE_DIR = CMakeFiles/webserver.dir/noactive
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target webserver
@@ -98,7 +104,7 @@ build CMakeFiles/webserver.dir/http_conn.cpp.o: CXX_COMPILER__webserver_Debug /U
 #############################################
 # Link the executable webserver
 
-build webserver: CXX_EXECUTABLE_LINKER__webserver_Debug CMakeFiles/webserver.dir/main.cpp.o CMakeFiles/webserver.dir/locker.cpp.o CMakeFiles/webserver.dir/http_conn.cpp.o
+build webserver: CXX_EXECUTABLE_LINKER__webserver_Debug CMakeFiles/webserver.dir/main.cpp.o CMakeFiles/webserver.dir/locker.cpp.o CMakeFiles/webserver.dir/http_conn.cpp.o CMakeFiles/webserver.dir/noactive/nonactive_conn.cpp.o
   FLAGS = -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk
   OBJECT_DIR = CMakeFiles/webserver.dir
   POST_BUILD = :
